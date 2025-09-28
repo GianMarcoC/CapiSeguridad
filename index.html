@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capi Seguridad - Descargar APK</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background-color: #F4D35E;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        
+        .titulo {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .panel {
+            background-color: rgba(255, 255, 255, 0.7); /* Panel semi-transparente */
+            padding: 60px; /* Más padding para extender el panel */
+            border-radius: 20px; /* Bordes más redondeados */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 80%;
+            width: 400px; /* Ancho fijo más grande */
+        }
+        
+        .download-image {
+            width: 200px; /* Imagen más grande */
+            height: 200px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        .download-image:hover {
+            transform: scale(1.1);
+        }
+        
+        .instruction {
+            margin-top: 25px;
+            color: #333;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="titulo">Capi Seguridad</h1>
+    
+    <div class="panel">
+        <img src="ARmentorF.png" alt="Descargar APK" class="download-image" id="downloadBtn">
+        <p class="instruction">Haz clic en la imagen para descargar</p>
+    </div>
+
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // Reemplaza "tu-archivo.apk" con la ruta real de tu archivo APK
+            alert('Descarga iniciada. Reemplaza esta alerta con la ruta real de tu APK.');
+            // window.location.href = 'tu-archivo.apk';
+        });
+    </script>
+</body>
+</html>
