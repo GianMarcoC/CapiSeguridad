@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Capi Seguridad - Descargar APK</title>
     <style>
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+        
+        body {
             min-height: 100vh;
             background-color: #F4D35E;
             display: flex;
@@ -15,43 +19,60 @@
             justify-content: center;
             align-items: center;
             font-family: Arial, sans-serif;
+            padding: 20px;
         }
         
         .titulo {
             text-align: center;
             color: #333;
             margin-bottom: 30px;
-            font-size: 2.5rem;
+            font-size: clamp(1.8rem, 5vw, 2.5rem); /* Tamaño responsive */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            width: 100%;
         }
         
         .panel {
-            background-color: rgba(255, 255, 255, 0.7); /* Panel semi-transparente */
-            padding: 60px; /* Más padding para extender el panel */
-            border-radius: 20px; /* Bordes más redondeados */
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: clamp(30px, 5vw, 60px); /* Padding responsive */
+            border-radius: 20px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
             text-align: center;
-            max-width: 80%;
-            width: 400px; /* Ancho fijo más grande */
+            width: min(90%, 500px); /* Ancho responsive */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
         .download-image {
-            width: 200px; /* Imagen más grande */
-            height: 200px;
+            width: min(70vw, 200px); /* Imagen responsive */
+            height: auto; /* Mantiene la proporción */
+            max-height: 200px;
             cursor: pointer;
             transition: transform 0.3s ease;
             border-radius: 10px;
         }
         
         .download-image:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
         
         .instruction {
             margin-top: 25px;
             color: #333;
-            font-size: 20px;
+            font-size: clamp(16px, 4vw, 20px); /* Tamaño responsive */
             font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Estilos para móviles pequeños */
+        @media (max-width: 480px) {
+            .panel {
+                padding: 25px;
+            }
+            
+            .titulo {
+                margin-bottom: 20px;
+            }
         }
     </style>
 </head>
@@ -65,9 +86,11 @@
 
     <script>
         document.getElementById('downloadBtn').addEventListener('click', function() {
-            // Reemplaza "tu-archivo.apk" con la ruta real de tu archivo APK
-            alert('Descarga iniciada. Reemplaza esta alerta con la ruta real de tu APK.');
-            // window.location.href = 'tu-archivo.apk';
+            // Cambia "app-capiseguridad.apk" por el nombre real de tu archivo APK
+            window.location.href = 'app-capiseguridad.apk';
+            
+            // Opcional: Puedes agregar un mensaje de confirmación
+            // alert('La descarga comenzará en breve...');
         });
     </script>
 </body>
