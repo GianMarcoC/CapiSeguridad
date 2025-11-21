@@ -41,6 +41,7 @@
             margin-bottom: 40px;
             padding: 20px 0;
             border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+            position: relative;
         }
         
         .titulo {
@@ -144,7 +145,6 @@
             position: relative;
         }
         
-        /* QUITAMOS el texto "Imagen del personaje" cuando hay imagen real */
         .personaje-img-container:not(:has(img[src]))::after {
             content: "Imagen del personaje";
             position: absolute;
@@ -156,7 +156,6 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            /* QUITAMOS display: none - esta era la causa del problema */
         }
         
         .personaje-header {
@@ -289,6 +288,82 @@
             color: var(--primary);
         }
         
+        /* Reproductor de música */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50px;
+            padding: 10px 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .music-player:hover {
+            transform: scale(1.05);
+        }
+        
+        .music-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .music-btn:hover {
+            background: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .music-loading {
+            font-size: 10px;
+            margin-left: 5px;
+            color: var(--accent);
+        }
+        
+        .volume-control {
+            width: 80px;
+            height: 5px;
+            background: #ddd;
+            border-radius: 10px;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        
+        .volume-control:hover {
+            opacity: 1;
+        }
+        
+        .volume-control::-webkit-slider-thumb {
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+        
+        .music-info {
+            font-size: 12px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
         footer {
             text-align: center;
             margin-top: 40px;
@@ -323,7 +398,21 @@
             }
             
             .personaje-img-container {
-                height: 150px;
+                height: 200px;
+            }
+            
+            .music-player {
+                bottom: 10px;
+                right: 10px;
+                padding: 8px 12px;
+            }
+            
+            .volume-control {
+                width: 60px;
+            }
+            
+            .music-info {
+                font-size: 10px;
             }
         }
         
@@ -340,9 +429,20 @@
         .personaje:nth-child(2) { animation-delay: 0.1s; }
         .personaje:nth-child(3) { animation-delay: 0.2s; }
         .personaje:nth-child(4) { animation-delay: 0.3s; }
+
+        
     </style>
 </head>
 <body>
+    <!-- Reproductor de música -->
+    <div class="music-player">
+        <button class="music-btn" id="playBtn">
+            <i class="fas fa-play"></i>
+        </button>
+        <input type="range" class="volume-control" id="volumeControl" min="0" max="1" step="0.1" value="0.5">
+        <span class="music-info">Música Ambient <span class="music-loading" id="musicLoading" style="display: none;">(cargando...)</span></span>
+    </div>
+
     <div class="container">
         <header>
             <h1 class="titulo">CapiSeguridad</h1>
@@ -368,7 +468,7 @@
                 <div class="caracteristica">
                     <i class="fas fa-graduation-cap"></i>
                     <h3>Educativo</h3>
-                    <p>Contenido especializado en ciberseguridad</p>
+                    <p>Contenido verificado por expertos en ciberseguridad</p>
                 </div>
                 <div class="caracteristica">
                     <i class="fas fa-gamepad"></i>
@@ -486,11 +586,112 @@
         </div>
         
         <footer>
-            <p>CapiSeguridad &copy; 2025 - Aprende seguridad digital de forma divertida</p>
+            <p>CapiSeguridad &copy; 2023 - Aprende seguridad digital de forma divertida</p>
         </footer>
     </div>
 
+    <!-- Audio para la música ambiental -->
+    <audio id="backgroundMusic" loop preload="auto">
+        <source src="weaving-dreams-by-businessstar-332945.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
     <script>
+        // Control de música - Estrategia mejorada
+        const audio = document.getElementById('backgroundMusic');
+        const playBtn = document.getElementById('playBtn');
+        const volumeControl = document.getElementById('volumeControl');
+        const musicLoading = document.getElementById('musicLoading');
+        
+        // Configurar volumen inicial
+        audio.volume = 0.4;
+        
+        // Estado de la música
+        let musicStarted = false;
+        
+        // Mostrar indicador de carga
+        musicLoading.style.display = 'inline';
+        
+        // Intentar reproducción automática con una estrategia más robusta
+        function tryAutoplay() {
+            // Primero, cargar el audio
+            audio.load();
+            
+            // Intentar reproducir con una promesa
+            const playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // Éxito - música comenzó a reproducirse
+                    console.log('Autoplay exitoso');
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    musicLoading.style.display = 'none';
+                    musicStarted = true;
+                }).catch(error => {
+                    // Si falla, mostrar mensaje y esperar interacción del usuario
+                    console.log('Autoplay bloqueado:', error);
+                    musicLoading.textContent = '(haz clic para reproducir)';
+                    
+                    // Intentar reproducir en cualquier interacción del usuario
+                    const enableAudio = function() {
+                        audio.play().then(() => {
+                            console.log('Música iniciada después de interacción del usuario');
+                            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                            musicLoading.style.display = 'none';
+                            musicStarted = true;
+                        }).catch(e => {
+                            console.error('Error al reproducir después de interacción:', e);
+                        });
+                        
+                        // Remover el event listener después del primer clic
+                        document.removeEventListener('click', enableAudio);
+                        document.removeEventListener('touchstart', enableAudio);
+                        document.removeEventListener('keydown', enableAudio);
+                    };
+                    
+                    // Agregar event listeners para diferentes tipos de interacción
+                    document.addEventListener('click', enableAudio);
+                    document.addEventListener('touchstart', enableAudio);
+                    document.addEventListener('keydown', enableAudio);
+                });
+            }
+        }
+
+        // Esperar a que la página esté completamente cargada antes de intentar el autoplay
+        window.addEventListener('load', function() {
+            // Pequeño retraso para asegurar que todo esté listo
+            setTimeout(tryAutoplay, 500);
+        });
+
+        // Control de reproducción manual
+        playBtn.addEventListener('click', function() {
+            if (musicStarted) {
+                if (!audio.paused) {
+                    audio.pause();
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                } else {
+                    audio.play();
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                }
+            } else {
+                // Si la música no ha comenzado, intentar iniciarla
+                audio.play().then(() => {
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    musicLoading.style.display = 'none';
+                    musicStarted = true;
+                }).catch(error => {
+                    console.error('Error al reproducir música:', error);
+                    musicLoading.textContent = '(error al cargar)';
+                });
+            }
+        });
+
+        // Control de volumen
+        volumeControl.addEventListener('input', function() {
+            audio.volume = this.value;
+        });
+
+        // Descarga de APK
         document.getElementById('downloadBtn').addEventListener('click', function() {
             window.location.href = 'CapiSeguridad.apk';
         });
