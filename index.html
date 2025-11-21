@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capi Seguridad - Descargar APK</title>
+    <title>Capi Seguridad - Aprende Seguridad Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
@@ -11,86 +12,508 @@
             padding: 0;
         }
         
+        :root {
+            --primary: #8E44AD;
+            --secondary: #F4D35E;
+            --accent: #E67E22;
+            --light: #FEF9E7;
+            --dark: #2C3E50;
+            --success: #27AE60;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
         body {
             min-height: 100vh;
-            background-color: #F4D35E;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #F4D35E 0%, #F9A875 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 20px;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
         }
         
         .titulo {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-            font-size: clamp(1.8rem, 5vw, 2.5rem); /* Tamaño responsive */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            width: 100%;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: clamp(2rem, 6vw, 3rem);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: 700;
         }
         
-        .panel {
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: clamp(30px, 5vw, 60px); /* Padding responsive */
+        .subtitulo {
+            color: var(--primary);
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        
+        .seccion {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: clamp(25px, 5vw, 40px);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+        
+        .seccion:hover {
+            transform: translateY(-5px);
+        }
+        
+        .seccion-titulo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            color: var(--primary);
+            font-size: clamp(1.4rem, 4vw, 1.8rem);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+        
+        .seccion-titulo i {
+            margin-right: 12px;
+            color: var(--accent);
+        }
+        
+        .descripcion {
+            font-size: clamp(16px, 4vw, 18px);
+            text-align: justify;
+            margin-bottom: 20px;
+            color: #444;
+        }
+        
+        .destacado {
+            background: linear-gradient(135deg, var(--primary), #6C3483);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: var(--shadow);
+        }
+        
+        .destacado h3 {
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+        
+        .personajes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .personaje {
+            background: white;
+            border-radius: 16px;
+            padding: 25px 20px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .personaje:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .personaje-img-container {
+            width: 100%;
+            height: 250px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        /* QUITAMOS el texto "Imagen del personaje" cuando hay imagen real */
+        .personaje-img-container:not(:has(img[src]))::after {
+            content: "Imagen del personaje";
+            position: absolute;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .personaje-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* QUITAMOS display: none - esta era la causa del problema */
+        }
+        
+        .personaje-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .personaje-icono {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+            color: white;
+        }
+        
+        .ernesto { background-color: var(--primary); }
+        .lucho { background-color: var(--accent); }
+        .villano { background-color: #9B59B6; }
+        .ra-mentor { background-color: var(--success); }
+        
+        .personaje-nombre {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+        
+        .personaje-descripcion {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #555;
+            flex-grow: 1;
+        }
+        
+        .panel-descarga {
+            background: linear-gradient(135deg, var(--primary), #6C3483);
+            color: white;
+            padding: clamp(30px, 5vw, 50px);
             border-radius: 20px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
-            width: min(90%, 500px); /* Ancho responsive */
+            width: min(90%, 500px);
+            margin: 40px auto;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .panel-descarga::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
         }
         
         .download-image {
-            width: min(70vw, 200px); /* Imagen responsive */
-            height: auto; /* Mantiene la proporción */
-            max-height: 200px;
+            width: min(60vw, 180px);
+            height: auto;
             cursor: pointer;
             transition: transform 0.3s ease;
-            border-radius: 10px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid var(--secondary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1;
         }
         
         .download-image:hover {
-            transform: scale(1.05);
+            transform: scale(1.08);
         }
         
         .instruction {
-            margin-top: 25px;
-            color: #333;
-            font-size: clamp(16px, 4vw, 20px); /* Tamaño responsive */
-            font-weight: bold;
+            margin-top: 20px;
+            font-size: clamp(16px, 4vw, 20px);
+            font-weight: 600;
             text-align: center;
+            z-index: 1;
+        }
+        
+        .logo-container {
+            margin: 40px 0 20px;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .logo {
+            max-width: 180px;
+            height: auto;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+        
+        .caracteristicas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .caracteristica {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        .caracteristica:hover {
+            transform: translateY(-5px);
+        }
+        
+        .caracteristica i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+        
+        .caracteristica h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: var(--primary);
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
         
         /* Estilos para móviles pequeños */
         @media (max-width: 480px) {
-            .panel {
-                padding: 25px;
+            .seccion {
+                padding: 20px;
             }
             
-            .titulo {
-                margin-bottom: 20px;
+            .personajes-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .caracteristicas {
+                grid-template-columns: 1fr;
+            }
+            
+            .personaje-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .personaje-icono {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .personaje-img-container {
+                height: 150px;
             }
         }
+        
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .seccion, .panel-descarga, .personaje {
+            animation: fadeIn 0.6s ease forwards;
+        }
+        
+        .personaje:nth-child(2) { animation-delay: 0.1s; }
+        .personaje:nth-child(3) { animation-delay: 0.2s; }
+        .personaje:nth-child(4) { animation-delay: 0.3s; }
     </style>
 </head>
 <body>
-    <h1 class="titulo">CapiSeguridad</h1>
-    
-    <div class="panel">
-        <img src="ARmentorF.png" alt="Descargar APK" class="download-image" id="downloadBtn">
-        <p class="instruction">Haz clic en la imagen para descargar</p>
+    <div class="container">
+        <header>
+            <h1 class="titulo">CapiSeguridad</h1>
+            <p class="subtitulo">Aprende seguridad digital de forma divertida y efectiva</p>
+        </header>
+        
+        <!-- Sección de descripción de la app -->
+        <div class="seccion">
+            <h2 class="seccion-titulo"><i class="fas fa-mobile-alt"></i> Sobre la Aplicación</h2>
+            <p class="descripcion">
+                CapiSeguridad es una innovadora aplicación educativa que utiliza realidad aumentada para enseñar 
+                sobre seguridad digital de manera divertida y accesible. A través de situaciones cotidianas y 
+                personajes entrañables, los usuarios aprenden a identificar y evitar amenazas como phishing, 
+                contraseñas débiles y redes Wi-Fi inseguras.
+            </p>
+            
+            <div class="destacado">
+                <h3>¿Por qué elegir CapiSeguridad?</h3>
+                <p>Combina educación y entretenimiento para hacer el aprendizaje de seguridad digital accesible para todas las edades.</p>
+            </div>
+            
+            <div class="caracteristicas">
+                <div class="caracteristica">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Educativo</h3>
+                    <p>Contenido verificado por expertos en ciberseguridad</p>
+                </div>
+                <div class="caracteristica">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>Interactivo</h3>
+                    <p>Aprende jugando con desafíos y recompensas</p>
+                </div>
+                <div class="caracteristica">
+                    <i class="fas fa-users"></i>
+                    <h3>Para todos</h3>
+                    <p>Diseñado para todas las edades y niveles de conocimiento</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sección de personajes -->
+        <div class="seccion">
+            <h2 class="seccion-titulo"><i class="fas fa-users"></i> Nuestros Personajes</h2>
+            <p class="descripcion">
+                Conoce a los personajes que te guiarán en este viaje de aprendizaje sobre seguridad digital. 
+                Cada uno tiene su propia personalidad y rol en la aplicación.
+            </p>
+            
+            <div class="personajes-container">
+                <!-- Don Ernesto -->
+                <div class="personaje">
+                    <div class="personaje-img-container">
+                        <img src="Don Ernesto CS.png" alt="Don Ernesto" class="personaje-img">
+                    </div>
+                    <div class="personaje-header">
+                        <div class="personaje-icono ernesto">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="personaje-nombre">Don Ernesto</div>
+                    </div>
+                    <div class="personaje-descripcion">
+                        Un adulto mayor de canas y lentes que siempre lleva su celular en mano, 
+                        viste con ropa clásica con algunos toques modernos. Es ingenuo, curioso 
+                        y con ganas de aprender, aunque suele confiar demasiado. Su papel es ser 
+                        el protagonista que cae en las trampas digitales.
+                    </div>
+                </div>
+                
+                <!-- Lucho -->
+                <div class="personaje">
+                    <div class="personaje-img-container">
+                        <img src="Lucho CS.png" alt="Lucho" class="personaje-img">
+                    </div>
+                    <div class="personaje-header">
+                        <div class="personaje-icono lucho">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <div class="personaje-nombre">Lucho</div>
+                    </div>
+                    <div class="personaje-descripcion">
+                        Un gamer universitario que usa audífonos grandes y viste hoodie mientras 
+                        juega en su portátil o consola. Se caracteriza por ser confiado y pensar 
+                        que "se las sabe todas", aunque también comete errores básicos. Su función 
+                        es contrastar con Don Ernesto, demostrando que incluso los jóvenes pueden 
+                        ser víctimas de los engaños digitales.
+                    </div>
+                </div>
+                
+                <!-- Villano Digital -->
+                <div class="personaje">
+                    <div class="personaje-img-container">
+                        <img src="Enemigos CS.png" alt="Villano Digital" class="personaje-img">
+                    </div>
+                    <div class="personaje-header">
+                        <div class="personaje-icono villano">
+                            <i class="fas fa-mask"></i>
+                        </div>
+                        <div class="personaje-nombre">Villano Digital</div>
+                    </div>
+                    <div class="personaje-descripcion">
+                        Una metáfora de las amenazas tecnológicas. Su aspecto cambia según el tema 
+                        tratado: puede aparecer como un sobre sonriente en el caso del phishing, 
+                        un candado roto para ilustrar contraseñas débiles o un router con antifaz 
+                        al hablar de redes Wi-Fi inseguras. Es burlón, exagerado y divertido, y su 
+                        rol es engañar a los protagonistas con humor.
+                    </div>
+                </div>
+                
+                <!-- RA Mentor -->
+                <div class="personaje">
+                    <div class="personaje-img-container">
+                        <img src="RA Mentor CS.png" alt="RA Mentor" class="personaje-img">
+                    </div>
+                    <div class="personaje-header">
+                        <div class="personaje-icono ra-mentor">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="personaje-nombre">RA Mentor</div>
+                    </div>
+                    <div class="personaje-descripcion">
+                        Solo aparece mediante realidad aumentada. Puede tomar la forma de un búho 
+                        digital, un ícono tecnológico animado o un holograma simpático. Su propósito 
+                        es interrumpir la escena para explicar de manera sencilla qué sucedió, cómo 
+                        evitar caer en la trampa y dar el consejo práctico al usuario.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sección de descarga -->
+        <div class="panel-descarga">
+            <h2 class="subtitulo" style="color: white;">Descarga la App</h2>
+            <p style="margin-bottom: 20px; z-index: 1;">Comienza tu aventura en seguridad digital hoy mismo</p>
+            <img src="ARmentorF.png" alt="Descargar APK" class="download-image" id="downloadBtn">
+            <p class="instruction">Haz clic en la imagen para descargar</p>
+        </div>
+        
+        <!-- Logo -->
+        <div class="logo-container">
+            <img src="ARmentorF.png" alt="Logo CapiSeguridad" class="logo">
+        </div>
+        
+        <footer>
+            <p>CapiSeguridad &copy; 2025 - Aprende seguridad digital de forma divertida</p>
+        </footer>
     </div>
 
     <script>
         document.getElementById('downloadBtn').addEventListener('click', function() {
-            // Cambia "app-capiseguridad.apk" por el nombre real de tu archivo APK
             window.location.href = 'CapiSeguridad.apk';
+        });
+        
+        // Efecto de aparición gradual al hacer scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const elementos = document.querySelectorAll('.seccion, .personaje, .caracteristica');
             
-            // Opcional: Puedes agregar un mensaje de confirmación
-            // alert('La descarga comenzará en breve...');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            elementos.forEach(el => {
+                el.style.opacity = 0;
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
         });
     </script>
 </body>
